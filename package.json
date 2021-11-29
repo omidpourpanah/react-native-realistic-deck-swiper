@@ -6,7 +6,7 @@
   "files": ["swiper.js", "helpers.js", "helpers.test.js"],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/omidpourpanah/react-native-realistic-deck-swiper"
+    "url": "git+https://github.com/omidpourpanah/react-native-realistic-deck-swiper-dnz"
   },
   "keywords": [
     "react-native",
@@ -23,7 +23,7 @@
   ],
   "author": "Anh Vo",
   "license": "MIT",
-  "homepage": "https://github.com/VGoose/react-native-realistic-deck-swiper#readme",
+  "homepage": "https://github.com/omidpourpanah/react-native-realistic-deck-swiper-dnz#readme",
   "dependencies": {
     "prop-types": "^15.7.2"
   },
