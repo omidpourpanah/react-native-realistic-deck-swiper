@@ -1,12 +1,12 @@
 {
-  "name": "react-native-realistic-deck-swiper",
-  "version": "0.1.3",
+  "name": "react-native-realistic-deck-swiper-dnz",
+  "version": "0.1.4",
   "description": "Deck swiper with realistic physics.",
   "main": "swiper.js",
   "files": ["swiper.js", "helpers.js", "helpers.test.js"],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/VGoose/react-native-realistic-deck-swiper.git"
+    "url": "git+https://github.com/omidpourpanah/react-native-realistic-deck-swiper"
   },
   "keywords": [
     "react-native",
