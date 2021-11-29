@@ -85,6 +85,7 @@ export default class Swiper extends React.Component {
     onSwiped: () => { },
     onReset: () => { },
     onSwipedAll: () => { },
+    reset: () => {},
     startIndex: 0,
     velocityThreshold: 0.4,
     rotationMultiplier: 1,
@@ -100,8 +101,13 @@ export default class Swiper extends React.Component {
   }
   initializePanResponder = () => {
     this.panResponder = PanResponder.create({
+      //onStartShouldSetPanResponderCapture: () => { return false},
+      onPanResponderTerminationRequest: (evt, gestureState) => true,
       onStartShouldSetPanResponder: (e, gestureState) => true,
-      onMoveShouldSetPanResponder: (e, gestureState) => true,
+      onMoveShouldSetPanResponder: (e, gestureState) => {
+        //return true if user is swiping, return false if it's a single click
+        return Math.abs(gestureState.dx) > 2 || Math.abs(gestureState.dy) > 2
+      },
       onPanResponderGrant: (e, gestureState) => { },
       onPanResponderMove: (e, gestureState) => {
         const { moveX, moveY, dx, dy } = gestureState
@@ -114,7 +120,7 @@ export default class Swiper extends React.Component {
           getInterpolatedRotation(this.cardOffsets[0], ROTATION_MAGNITUDE * rotationMultiplier)
         let totalRotation = rotation + topCardInitialRotation
         this.rotationTopCard.setValue(totalRotation)
-        Animated.event([null, { dx: this.position.x, dy: this.position.y }])(null, gestureState)
+        Animated.event([null, { dx: this.position.x, dy: this.position.y }],{useNativeDriver:false})(null, gestureState)
       },
       onPanResponderRelease: (e, gestureState) => {
         const { moveX, moveY, dx, dy, vx, vy } = gestureState
@@ -134,7 +140,7 @@ export default class Swiper extends React.Component {
         const finalRotation = rotation0 + rotationT
 
         const vMagnitude = Math.sqrt(vx * vx + vy * vy)
-        if (vMagnitude > validThreshold) {
+        if ((vMagnitude > validThreshold) && (vy < 1.00) && (vy > -1.00)){
           this.props.onSwipeStart(currentIndex)
           this.animateCardOffScreen(finalPosition, finalRotation,
             () => this.onSwipe(currentIndex, cardsData, { vx: vx, vy: vy })
@@ -151,12 +157,12 @@ export default class Swiper extends React.Component {
       Animated.timing(this.position, {
         toValue: finalPosition,
         duration: this.props.topCardAnimationDuration,
-        useNativeDriver: true
+        useNativeDriver: false
       }),
       Animated.timing(this.rotationTopCard, {
         toValue: finalRotation,
         duration: this.props.topCardAnimationDuration,
-        useNativeDriver: true
+        useNativeDriver: false
       })
     ]
     ).start(() => {
@@ -167,12 +173,12 @@ export default class Swiper extends React.Component {
     this.props.onReset(velocityVector)
     Animated.spring(this.rotationTopCard, {
       toValue: getInterpolatedRotation(this.cardOffsets[0], ROTATION_MAGNITUDE * this.props.rotationMultiplier),
-      useNativeDriver: true,
+      useNativeDriver: false,
       ...this.props.springConstants
     }).start()
     Animated.spring(this.position, {
       toValue: { x: 0, y: 0 },
-      useNativeDriver: true,
+      useNativeDriver: false,
       ...this.props.springConstants
     }).start()
   }
@@ -240,7 +246,7 @@ export default class Swiper extends React.Component {
     Animated.timing(this.rotationBottomCard, {
       toValue: value,
       duration: this.props.bottomCardAnimationDuration > 0 ? this.props.bottomCardAnimationDuration : 500,
-      useNativeDriver: true
+      useNativeDriver: false
     }).start(cb())
   }
   makeCard = (style, deckIndex, currentIndex, deckSize, renderCard, cardsData) => {
@@ -266,7 +272,7 @@ export default class Swiper extends React.Component {
       measureAnimatedView={this.measureAnimatedView}
       cardIndex={cardIndex}
       deckIndex={deckIndex}
-      key={deckIndex}
+      key={cardIndex}
       panHandlers={this.panResponder.panHandlers}
       style={style}
     />
@@ -323,6 +329,7 @@ Swiper.propTypes = {
   onSwipeStart: PropTypes.func,
   onSwiped: PropTypes.func,
   onSwipedAll: PropTypes.func,
+  reset: PropTypes.func,
   onReset: PropTypes.func,
   deckSize: (props, propName, componentName) => {
     if (!Number.isInteger(props[propName]) || props[propName] < 2) {
