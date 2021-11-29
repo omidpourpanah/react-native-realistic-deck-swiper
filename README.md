@@ -21,12 +21,12 @@ These instructions will get you a copy of the project up and running on your loc
 ## Installation and Usage
 
 ```
-npm i react-native-realistic-deck-swiper
+npm i react-native-realistic-deck-swiper-dnz
 ```
 ```javascript
 import React from 'react'
 import { View, Text } from 'react-native'
-import Swiper from 'react-native-realistic-deck-swiper'
+import Swiper from 'react-native-realistic-deck-swiper-dnz'
 
 const Data = [
   { id: "1" },
