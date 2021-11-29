@@ -9,6 +9,7 @@ Swipeable deck with realistic physics, based on NYer Today app's cartoons swipe 
 
 ## Change Log
 
+v0.1.4 block swip to top and bottom
 v0.1.3 Allow touchables composed within cards, fix android undefined rotation transform
 
 ## Getting Started
